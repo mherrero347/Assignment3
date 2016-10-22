@@ -1,3 +1,6 @@
+# Update!
+It now compiles, but does not produce sound. Getting there...
+
 # Assignment3
 
 This, at the moment, is a very sad, non-compiling attempt at assignment 3, creating a MIDI controlled plugin. I'm going to see if I can make it work, though...
