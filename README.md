@@ -1,4 +1,7 @@
-# Update!
+# Update 2
+Still compiling, and recently produced noise, but now that I'm trying to implement a Faust-generated sound, it won't produce noise again :(
+
+# Update 1
 It now compiles, but does not produce sound. Getting there...
 
 # Assignment3
