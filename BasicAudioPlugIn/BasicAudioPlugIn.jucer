@@ -12,6 +12,10 @@
               jucerVersion="4.2.4">
   <MAINGROUP id="sqV3fD" name="BasicAudioPlugIn">
     <GROUP id="{EF6B26BF-0D29-4094-89A8-B88AA2C5384B}" name="Source">
+      <FILE id="ZW8EtA" name="splatter_midi_back.jpg" compile="0" resource="1"
+            file="/Volumes/Macintosh HD/Users/matthewherrero/Google Drive/2016 - Fall/Music 256/Assignments/splatter_midi_back.jpg"/>
+      <FILE id="F2MNEf" name="Saw.h" compile="0" resource="0" file="/Users/matthewherrero/Desktop/Saw.h"/>
+      <FILE id="dglcZC" name="FMSynthSource.h" compile="0" resource="0" file="Source/FMSynthSource.h"/>
       <FILE id="ROOHC3" name="Smooth.h" compile="0" resource="0" file="Source/Smooth.h"/>
       <FILE id="UzUOqJ" name="Sine.h" compile="0" resource="0" file="Source/Sine.h"/>
       <FILE id="elMOPS" name="PluginProcessor.cpp" compile="1" resource="0"

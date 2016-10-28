@@ -10,56 +10,20 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Smooth.h"
 #include "Sine.h"
+#include "Saw.h"
+#include "FMSynthSource.h"
 
 //==============================================================================
 /**
 */
 class BasicAudioPlugInAudioProcessor  : public AudioProcessor
 {
-public:
-    struct FMSound : public SynthesiserSound
-    {
-        FMSound();
-        ~FMSound();
-        bool appliesToNote (int /*midiNoteNumber*/) override;
-        bool appliesToChannel (int /*midiChannel*/) override;
-    };
-    
-    struct FMVoice : public SynthesiserVoice
-    {
-        FMVoice();
-        ~FMVoice();
-        bool canPlaySound (SynthesiserSound* sound) override;
-        void startNote (int midiNoteNumber, float velocity,
-                        SynthesiserSound*, int /*currentPitchWheelPosition*/) override;
-        void stopNote (float /*velocity*/, bool allowTailOff) override;
-        void pitchWheelMoved (int /*newValue*/) override;
-        void controllerMoved (int /*controllerNumber*/, int /*newValue*/) override;
-        void renderNextBlock (AudioSampleBuffer& outputBuffer, int startSample, int numSamples) override;
-        
-    private:
-        Sine carrier, modulator;
-        Smooth smooth[2];
-        double carrierFrequency, index, level, envelope;
-        bool onOff, tailOff;
-    };
-    
-    struct SynthAudioSource : public AudioSource
-    {
-        SynthAudioSource (MidiKeyboardState& keyState);
-        ~SynthAudioSource ();
-        void prepareToPlay (int /*samplesPerBlockExpected*/, double sampleRate) override;
-        void releaseResources() override;
-        void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override;
-        MidiMessageCollector midiCollector;
-        MidiKeyboardState& keyboardStateSource;
-        Synthesiser synth;
-    };
-    
+public:    
     //==============================================================================
     BasicAudioPlugInAudioProcessor();
     ~BasicAudioPlugInAudioProcessor();
 
+    void initializeSynth();
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
@@ -92,10 +56,10 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    Sine sine;
-    AudioSourcePlayer audioSourcePlayer;
-    SynthAudioSource synthAudioSource;
+    //Public for now
     MidiKeyboardState keyboardState;
+    MidiMessageCollector messageCollector;
+    Synthesiser synth;
     
     float onOff, gain;
     int samplingRate;
@@ -103,7 +67,6 @@ public:
 private:
     float** audioBuffer;
     int nChans;
-    MidiMessageCollector messageCollector;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BasicAudioPlugInAudioProcessor)

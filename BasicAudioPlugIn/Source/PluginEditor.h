@@ -55,6 +55,8 @@ private:
     bool isAddingFromMidiInput;
     
     MidiKeyboardComponent keyboardComponent;
+    Random random;
+    int currentDownColor;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BasicAudioPlugInAudioProcessorEditor)
 };
