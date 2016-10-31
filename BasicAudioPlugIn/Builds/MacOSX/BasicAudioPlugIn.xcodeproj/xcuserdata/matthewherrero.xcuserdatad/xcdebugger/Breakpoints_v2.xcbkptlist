@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Source/PluginEditor.cpp"
-            timestampString = "499387960.868938"
+            timestampString = "499650082.847331"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
+            startingLineNumber = "124"
+            endingLineNumber = "124"
             landmarkName = "BasicAudioPlugInAudioProcessorEditor::handleIncomingMidiMessage(MidiInput* source, const MidiMessage&amp; message)"
             landmarkType = "7">
          </BreakpointContent>
@@ -43,7 +43,7 @@
             condition = "hitStart"
             continueAfterRunningActions = "No"
             filePath = "../../Source/FMSynthSource.h"
-            timestampString = "499388811.622614"
+            timestampString = "499649750.209665"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "77"

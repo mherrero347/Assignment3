@@ -30,10 +30,13 @@ public:
     {
         sawOsc.init(getSampleRate());
         sawOsc.buildUserInterface(&sawControl);
+        sample_pass = new float*[1];
+        sample_pass[0] = new float[1];
     }
     
     ~FMVoice() {
-        
+        delete [] sample_pass[0];
+        delete [] sample_pass;
     }
     
     bool canPlaySound (SynthesiserSound* sound) override
@@ -68,9 +71,6 @@ public:
     
     void renderNextBlock (AudioSampleBuffer& outputBuffer, int startSample, int numSamples) override
     {
-        float** sample_pass = new float*[1];
-        sample_pass[0] = new float[1];
-        
         // only compute block if note is on!
         while (--numSamples >= 0){
             
@@ -80,14 +80,12 @@ public:
             }
             ++startSample;
         }
-        
-        delete [] sample_pass[0];
-        delete [] sample_pass;
     }
     
 private:
     Saw sawOsc;
     MapUI sawControl;
+    float** sample_pass;
 };
 
 #endif  // FMSYNTHSOURCE_H_INCLUDED

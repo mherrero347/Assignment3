@@ -72,7 +72,9 @@ BasicAudioPlugInAudioProcessorEditor::~BasicAudioPlugInAudioProcessorEditor()
 
 //==============================================================================
 void BasicAudioPlugInAudioProcessorEditor::paint (Graphics& g){
-    File background_file ("/Users/matthewherrero/Google Drive/2016 - Fall/Music 256/Assignments/splatter_midi_back.jpg");
+    //According to the Projucer File object documentation, this cannot be a relative
+    //link :( you might need to re-point this path
+    File background_file ("/Applications/JUCE/projects/BasicAudioPlugin/Source/splatter_midi_back.jpg");
     Image background = ImageCache::getFromFile(background_file);
     g.drawImage(background, 0, 0, getWidth(), getHeight(), 0, 0, background.getWidth(), background.getHeight(), false );
 }
