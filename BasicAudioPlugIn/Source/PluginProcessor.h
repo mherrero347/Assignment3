@@ -60,8 +60,7 @@ public:
     MidiKeyboardState keyboardState;
     MidiMessageCollector messageCollector;
     Synthesiser synth;
-    
-    float onOff, gain;
+
     int samplingRate;
     
 private:

@@ -89,18 +89,11 @@ void BasicAudioPlugInAudioProcessorEditor::resized(){
 }
 
 void BasicAudioPlugInAudioProcessorEditor::sliderValueChanged(Slider *slider){
-    if (processor.samplingRate > 0.0){
-        
-    }
+
 }
 
 void BasicAudioPlugInAudioProcessorEditor::buttonClicked(Button *button){
-    if(button == &onOffButton && onOffButton.getToggleState()){
-        processor.onOff = 1.0;
-    }
-    else{
-        processor.onOff = 0.0;
-    }
+    
 }
 
 //==============================================================================

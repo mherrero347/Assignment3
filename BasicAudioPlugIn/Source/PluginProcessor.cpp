@@ -9,7 +9,7 @@
 #include "FMSynthSource.h"
 
 //==============================================================================
-BasicAudioPlugInAudioProcessor::BasicAudioPlugInAudioProcessor() : onOff (0.0), gain (0.0), samplingRate(0.0)
+BasicAudioPlugInAudioProcessor::BasicAudioPlugInAudioProcessor() : samplingRate(0.0)
 {
     nChans = getTotalNumOutputChannels();
     audioBuffer = new float*[nChans];
@@ -19,6 +19,8 @@ BasicAudioPlugInAudioProcessor::BasicAudioPlugInAudioProcessor() : onOff (0.0), 
 BasicAudioPlugInAudioProcessor::~BasicAudioPlugInAudioProcessor()
 {
     delete [] audioBuffer;
+    synth.clearSounds();
+    synth.clearVoices();
 }
 
 void BasicAudioPlugInAudioProcessor::initializeSynth()

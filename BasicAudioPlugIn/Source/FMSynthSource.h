@@ -48,14 +48,14 @@ public:
                     SynthesiserSound*, int /*currentPitchWheelPosition*/) override
     {
         double note_freq = MidiMessage::getMidiNoteInHertz(midiNoteNumber);
-        sawControl.setParamValue("/saw/freq",note_freq);
-        sawControl.setParamValue("/saw/level", velocity);
+        sawControl.setParamValue("/saw/freq", note_freq);
+        sawControl.setParamValue("/saw/gain", velocity);
+        sawControl.setParamValue("/saw/gate", 1);
     }
     
     void stopNote (float /*velocity*/, bool allowTailOff) override
     {
-        sawControl.setParamValue("/saw/level", 0);
-        
+        sawControl.setParamValue("/saw/gate", 0);
     }
     
     void pitchWheelMoved (int /*newValue*/) override
@@ -73,7 +73,6 @@ public:
     {
         // only compute block if note is on!
         while (--numSamples >= 0){
-            
             sawOsc.compute(1, sample_pass, sample_pass);
             for (int i = outputBuffer.getNumChannels(); --i >= 0;){
                 outputBuffer.addSample (i, startSample, sample_pass[0][0]);

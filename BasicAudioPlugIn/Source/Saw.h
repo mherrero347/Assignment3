@@ -659,26 +659,50 @@ class decorator_dsp : public dsp {
 
 class Saw : public dsp {
   private:
+	FAUSTFLOAT 	fbutton0;
+	float 	fVec0[2];
+	int 	iVec1[2];
 	float 	fConst0;
 	float 	fConst1;
-	FAUSTFLOAT 	fentry0;
-	float 	fRec2[2];
 	float 	fRec0[2];
-	FAUSTFLOAT 	fentry1;
+	float 	fConst2;
+	float 	fConst3;
+	float 	fConst4;
+	float 	fConst5;
+	FAUSTFLOAT 	fentry0;
 	float 	fRec3[2];
+	float 	fRec1[2];
+	float 	fRec2[2];
+	float 	fConst6;
+	float 	fRec4[2];
+	float 	fRec5[2];
+	float 	fConst7;
+	float 	fRec6[2];
+	float 	fRec7[2];
+	FAUSTFLOAT 	fentry1;
+	float 	fRec8[2];
 	int fSamplingFreq;
 
   public:
 	virtual void metadata(Meta* m) { 
 		m->declare("miscoscillator.lib/name", "Faust Oscillator Library");
 		m->declare("miscoscillator.lib/version", "0.0");
-		m->declare("math.lib/license", "LGPL with exception");
-		m->declare("signal.lib/name", "Faust Signal Routing Library");
-		m->declare("signal.lib/version", "0.0");
+		m->declare("filter.lib/name", "Faust Filter Library");
+		m->declare("filter.lib/version", "2.0");
 		m->declare("math.lib/name", "Faust Math Library");
 		m->declare("math.lib/version", "2.0");
 		m->declare("math.lib/author", "GRAME");
 		m->declare("math.lib/copyright", "GRAME");
+		m->declare("math.lib/license", "LGPL with exception");
+		m->declare("signal.lib/name", "Faust Signal Routing Library");
+		m->declare("signal.lib/version", "0.0");
+		m->declare("envelope.lib/name", "Faust Envelope Library");
+		m->declare("envelope.lib/version", "0.0");
+		m->declare("envelope.lib/author", "GRAME");
+		m->declare("envelope.lib/copyright", "GRAME");
+		m->declare("envelope.lib/license", "LGPL with exception");
+		m->declare("basic.lib/name", "Faust Basic Element Library");
+		m->declare("basic.lib/version", "0.0");
 	}
 
 	virtual int getNumInputs() { return 0; }
@@ -687,17 +711,32 @@ class Saw : public dsp {
 	}
 	virtual void instanceConstants(int samplingFreq) {
 		fSamplingFreq = samplingFreq;
-		fConst0 = float(min(1.92e+05f, max(1.0f, (float)fSamplingFreq)));
-		fConst1 = (1.0f / fConst0);
+		fConst0 = min(1.92e+05f, max(1.0f, (float)fSamplingFreq));
+		fConst1 = (0.51f * fConst0);
+		fConst2 = (0.01f * fConst0);
+		fConst3 = (1e+02f / fConst0);
+		fConst4 = (2.0f / fConst0);
+		fConst5 = (6.2831855f / fConst0);
+		fConst6 = (4.1887903f / fConst0);
+		fConst7 = (3.1415927f / fConst0);
 	}
 	virtual void instanceResetUserInterface() {
+		fbutton0 = 0.0;
 		fentry0 = 4.4e+02f;
 		fentry1 = 1.0f;
 	}
 	virtual void instanceClear() {
-		for (int i=0; i<2; i++) fRec2[i] = 0;
+		for (int i=0; i<2; i++) fVec0[i] = 0;
+		for (int i=0; i<2; i++) iVec1[i] = 0;
 		for (int i=0; i<2; i++) fRec0[i] = 0;
 		for (int i=0; i<2; i++) fRec3[i] = 0;
+		for (int i=0; i<2; i++) fRec1[i] = 0;
+		for (int i=0; i<2; i++) fRec2[i] = 0;
+		for (int i=0; i<2; i++) fRec4[i] = 0;
+		for (int i=0; i<2; i++) fRec5[i] = 0;
+		for (int i=0; i<2; i++) fRec6[i] = 0;
+		for (int i=0; i<2; i++) fRec7[i] = 0;
+		for (int i=0; i<2; i++) fRec8[i] = 0;
 	}
 	virtual void init(int samplingFreq) {
 		classInit(samplingFreq);
@@ -715,29 +754,53 @@ class Saw : public dsp {
 		return fSamplingFreq;
 	}
 	virtual void buildUserInterface(UI* ui_interface) {
-		ui_interface->openHorizontalBox("saw");
+		ui_interface->openVerticalBox("saw");
 		ui_interface->addNumEntry("freq", &fentry0, 4.4e+02f, 2e+01f, 2e+04f, 0.01f);
 		ui_interface->addNumEntry("gain", &fentry1, 1.0f, 0.0f, 1.0f, 0.01f);
+		ui_interface->addButton("trigger", &fbutton0);
 		ui_interface->closeBox();
 	}
 	virtual void compute (int count, FAUSTFLOAT** input, FAUSTFLOAT** output) {
-		float 	fSlow0 = (0.001f * float(fentry0));
-		float 	fSlow1 = (0.001f * float(fentry1));
+		float 	fSlow0 = float(fbutton0);
+		float 	fSlow1 = (0.001f * float(fentry0));
+		float 	fSlow2 = (0.001f * float(fentry1));
 		FAUSTFLOAT* output0 = output[0];
 		for (int i=0; i<count; i++) {
-			fRec2[0] = (fSlow0 + (0.999f * fRec2[1]));
-			float fTemp0 = float(max(1e-07f, fabsf(fRec2[0])));
-			float fTemp1 = (fRec0[1] + (fConst1 * fTemp0));
-			float fTemp2 = (fTemp1 + -1);
-			int iTemp3 = int((fTemp2 < 0));
-			fRec0[0] = ((iTemp3)?fTemp1:fTemp2);
-			float 	fRec1 = ((iTemp3)?fTemp1:(fTemp1 + ((1 - (fConst0 / fTemp0)) * fTemp2)));
+			fVec0[0] = fSlow0;
+			iVec1[0] = 1;
+			fRec0[0] = ((int((((fSlow0 - fVec0[1]) == 1) > 0)))?0:min(fConst1, (fRec0[1] + 1)));
+			int iTemp0 = int((fRec0[0] < fConst2));
 			fRec3[0] = (fSlow1 + (0.999f * fRec3[1]));
-			output0[i] = (FAUSTFLOAT)(((2 * fRec1) + -1) * fRec3[0]);
+			float fTemp1 = (fConst5 * fRec3[0]);
+			float fTemp2 = sinf(fTemp1);
+			float fTemp3 = cosf(fTemp1);
+			fRec1[0] = ((fRec2[1] * fTemp2) + (fRec1[1] * fTemp3));
+			int iTemp4 = (1 - iVec1[1]);
+			fRec2[0] = (((fRec2[1] * fTemp3) + (fRec1[1] * (0 - fTemp2))) + iTemp4);
+			float fTemp5 = (fConst6 * fRec3[0]);
+			float fTemp6 = cosf(fTemp5);
+			float fTemp7 = sinf(fTemp5);
+			fRec4[0] = ((fRec4[1] * fTemp6) + (fRec5[1] * fTemp7));
+			fRec5[0] = (((fRec4[1] * (0 - fTemp7)) + (fRec5[1] * fTemp6)) + iTemp4);
+			float fTemp8 = (fConst7 * fRec3[0]);
+			float fTemp9 = cosf(fTemp8);
+			float fTemp10 = sinf(fTemp8);
+			fRec6[0] = ((fRec6[1] * fTemp9) + (fRec7[1] * fTemp10));
+			fRec7[0] = (((fRec6[1] * (0 - fTemp10)) + (fRec7[1] * fTemp9)) + iTemp4);
+			fRec8[0] = (fSlow2 + (0.999f * fRec8[1]));
+			output0[i] = (FAUSTFLOAT)((((iTemp0)?((int((fRec0[0] < 0)))?0:((iTemp0)?(fConst3 * fRec0[0]):1)):((int((fRec0[0] < fConst1)))?((fConst4 * (fConst2 - fRec0[0])) + 1):0)) * ((fRec1[0] + fRec4[0]) + fRec6[0])) * fRec8[0]);
 			// post processing
+			fRec8[1] = fRec8[0];
+			fRec7[1] = fRec7[0];
+			fRec6[1] = fRec6[0];
+			fRec5[1] = fRec5[0];
+			fRec4[1] = fRec4[0];
+			fRec2[1] = fRec2[0];
+			fRec1[1] = fRec1[0];
 			fRec3[1] = fRec3[0];
 			fRec0[1] = fRec0[0];
-			fRec2[1] = fRec2[0];
+			iVec1[1] = iVec1[0];
+			fVec0[1] = fVec0[0];
 		}
 	}
 };
