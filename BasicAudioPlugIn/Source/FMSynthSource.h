@@ -50,12 +50,12 @@ public:
         double note_freq = MidiMessage::getMidiNoteInHertz(midiNoteNumber);
         sawControl.setParamValue("/saw/freq", note_freq);
         sawControl.setParamValue("/saw/gain", velocity);
-        sawControl.setParamValue("/saw/gate", 1);
+        sawControl.setParamValue("/saw/trigger", 1);
     }
     
     void stopNote (float /*velocity*/, bool allowTailOff) override
     {
-        sawControl.setParamValue("/saw/gate", 0);
+        sawControl.setParamValue("/saw/trigger", 0);
     }
     
     void pitchWheelMoved (int /*newValue*/) override

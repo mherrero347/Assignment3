@@ -659,50 +659,51 @@ class decorator_dsp : public dsp {
 
 class Saw : public dsp {
   private:
-	FAUSTFLOAT 	fbutton0;
-	float 	fVec0[2];
-	int 	iVec1[2];
+	int 	iVec0[2];
 	float 	fConst0;
 	float 	fConst1;
-	float 	fRec0[2];
-	float 	fConst2;
-	float 	fConst3;
-	float 	fConst4;
-	float 	fConst5;
 	FAUSTFLOAT 	fentry0;
 	float 	fRec3[2];
 	float 	fRec1[2];
 	float 	fRec2[2];
-	float 	fConst6;
+	float 	fConst2;
 	float 	fRec4[2];
 	float 	fRec5[2];
-	float 	fConst7;
+	float 	fConst3;
 	float 	fRec6[2];
 	float 	fRec7[2];
 	FAUSTFLOAT 	fentry1;
 	float 	fRec8[2];
+	FAUSTFLOAT 	fbutton0;
+	float 	fVec1[2];
+	float 	fConst4;
+	float 	fRec9[2];
+	float 	fConst5;
+	float 	fConst6;
+	float 	fConst7;
+	float 	fRec0[2];
 	int fSamplingFreq;
 
   public:
 	virtual void metadata(Meta* m) { 
+		m->declare("basic.lib/name", "Faust Basic Element Library");
+		m->declare("basic.lib/version", "0.0");
 		m->declare("miscoscillator.lib/name", "Faust Oscillator Library");
 		m->declare("miscoscillator.lib/version", "0.0");
-		m->declare("filter.lib/name", "Faust Filter Library");
-		m->declare("filter.lib/version", "2.0");
-		m->declare("math.lib/name", "Faust Math Library");
-		m->declare("math.lib/version", "2.0");
-		m->declare("math.lib/author", "GRAME");
-		m->declare("math.lib/copyright", "GRAME");
-		m->declare("math.lib/license", "LGPL with exception");
 		m->declare("signal.lib/name", "Faust Signal Routing Library");
 		m->declare("signal.lib/version", "0.0");
+		m->declare("filter.lib/name", "Faust Filter Library");
+		m->declare("filter.lib/version", "2.0");
 		m->declare("envelope.lib/name", "Faust Envelope Library");
 		m->declare("envelope.lib/version", "0.0");
 		m->declare("envelope.lib/author", "GRAME");
 		m->declare("envelope.lib/copyright", "GRAME");
 		m->declare("envelope.lib/license", "LGPL with exception");
-		m->declare("basic.lib/name", "Faust Basic Element Library");
-		m->declare("basic.lib/version", "0.0");
+		m->declare("math.lib/name", "Faust Math Library");
+		m->declare("math.lib/version", "2.0");
+		m->declare("math.lib/author", "GRAME");
+		m->declare("math.lib/copyright", "GRAME");
+		m->declare("math.lib/license", "LGPL with exception");
 	}
 
 	virtual int getNumInputs() { return 0; }
@@ -712,23 +713,21 @@ class Saw : public dsp {
 	virtual void instanceConstants(int samplingFreq) {
 		fSamplingFreq = samplingFreq;
 		fConst0 = min(1.92e+05f, max(1.0f, (float)fSamplingFreq));
-		fConst1 = (0.51f * fConst0);
-		fConst2 = (0.01f * fConst0);
-		fConst3 = (1e+02f / fConst0);
-		fConst4 = (2.0f / fConst0);
-		fConst5 = (6.2831855f / fConst0);
-		fConst6 = (4.1887903f / fConst0);
-		fConst7 = (3.1415927f / fConst0);
+		fConst1 = (6.2831855f / fConst0);
+		fConst2 = (4.1887903f / fConst0);
+		fConst3 = (3.1415927f / fConst0);
+		fConst4 = (0.57f * fConst0);
+		fConst5 = (0.07f * fConst0);
+		fConst6 = (14.285714f / fConst0);
+		fConst7 = (2.0f / fConst0);
 	}
 	virtual void instanceResetUserInterface() {
-		fbutton0 = 0.0;
 		fentry0 = 4.4e+02f;
 		fentry1 = 1.0f;
+		fbutton0 = 0.0;
 	}
 	virtual void instanceClear() {
-		for (int i=0; i<2; i++) fVec0[i] = 0;
-		for (int i=0; i<2; i++) iVec1[i] = 0;
-		for (int i=0; i<2; i++) fRec0[i] = 0;
+		for (int i=0; i<2; i++) iVec0[i] = 0;
 		for (int i=0; i<2; i++) fRec3[i] = 0;
 		for (int i=0; i<2; i++) fRec1[i] = 0;
 		for (int i=0; i<2; i++) fRec2[i] = 0;
@@ -737,6 +736,9 @@ class Saw : public dsp {
 		for (int i=0; i<2; i++) fRec6[i] = 0;
 		for (int i=0; i<2; i++) fRec7[i] = 0;
 		for (int i=0; i<2; i++) fRec8[i] = 0;
+		for (int i=0; i<2; i++) fVec1[i] = 0;
+		for (int i=0; i<2; i++) fRec9[i] = 0;
+		for (int i=0; i<2; i++) fRec0[i] = 0;
 	}
 	virtual void init(int samplingFreq) {
 		classInit(samplingFreq);
@@ -761,35 +763,39 @@ class Saw : public dsp {
 		ui_interface->closeBox();
 	}
 	virtual void compute (int count, FAUSTFLOAT** input, FAUSTFLOAT** output) {
-		float 	fSlow0 = float(fbutton0);
-		float 	fSlow1 = (0.001f * float(fentry0));
-		float 	fSlow2 = (0.001f * float(fentry1));
+		float 	fSlow0 = (0.001f * float(fentry0));
+		float 	fSlow1 = (0.001f * float(fentry1));
+		float 	fSlow2 = float(fbutton0);
 		FAUSTFLOAT* output0 = output[0];
 		for (int i=0; i<count; i++) {
-			fVec0[0] = fSlow0;
-			iVec1[0] = 1;
-			fRec0[0] = ((int((((fSlow0 - fVec0[1]) == 1) > 0)))?0:min(fConst1, (fRec0[1] + 1)));
-			int iTemp0 = int((fRec0[0] < fConst2));
-			fRec3[0] = (fSlow1 + (0.999f * fRec3[1]));
-			float fTemp1 = (fConst5 * fRec3[0]);
-			float fTemp2 = sinf(fTemp1);
-			float fTemp3 = cosf(fTemp1);
-			fRec1[0] = ((fRec2[1] * fTemp2) + (fRec1[1] * fTemp3));
-			int iTemp4 = (1 - iVec1[1]);
-			fRec2[0] = (((fRec2[1] * fTemp3) + (fRec1[1] * (0 - fTemp2))) + iTemp4);
-			float fTemp5 = (fConst6 * fRec3[0]);
-			float fTemp6 = cosf(fTemp5);
-			float fTemp7 = sinf(fTemp5);
-			fRec4[0] = ((fRec4[1] * fTemp6) + (fRec5[1] * fTemp7));
-			fRec5[0] = (((fRec4[1] * (0 - fTemp7)) + (fRec5[1] * fTemp6)) + iTemp4);
-			float fTemp8 = (fConst7 * fRec3[0]);
-			float fTemp9 = cosf(fTemp8);
-			float fTemp10 = sinf(fTemp8);
-			fRec6[0] = ((fRec6[1] * fTemp9) + (fRec7[1] * fTemp10));
-			fRec7[0] = (((fRec6[1] * (0 - fTemp10)) + (fRec7[1] * fTemp9)) + iTemp4);
-			fRec8[0] = (fSlow2 + (0.999f * fRec8[1]));
-			output0[i] = (FAUSTFLOAT)((((iTemp0)?((int((fRec0[0] < 0)))?0:((iTemp0)?(fConst3 * fRec0[0]):1)):((int((fRec0[0] < fConst1)))?((fConst4 * (fConst2 - fRec0[0])) + 1):0)) * ((fRec1[0] + fRec4[0]) + fRec6[0])) * fRec8[0]);
+			iVec0[0] = 1;
+			fRec3[0] = (fSlow0 + (0.999f * fRec3[1]));
+			float fTemp0 = (fConst1 * fRec3[0]);
+			float fTemp1 = sinf(fTemp0);
+			float fTemp2 = cosf(fTemp0);
+			fRec1[0] = ((fRec2[1] * fTemp1) + (fRec1[1] * fTemp2));
+			int iTemp3 = (1 - iVec0[1]);
+			fRec2[0] = (((fRec2[1] * fTemp2) + (fRec1[1] * (0 - fTemp1))) + iTemp3);
+			float fTemp4 = (fConst2 * fRec3[0]);
+			float fTemp5 = sinf(fTemp4);
+			float fTemp6 = cosf(fTemp4);
+			fRec4[0] = ((fRec5[1] * fTemp5) + (fRec4[1] * fTemp6));
+			fRec5[0] = (((fRec5[1] * fTemp6) + (fRec4[1] * (0 - fTemp5))) + iTemp3);
+			float fTemp7 = (fConst3 * fRec3[0]);
+			float fTemp8 = sinf(fTemp7);
+			float fTemp9 = cosf(fTemp7);
+			fRec6[0] = ((fRec7[1] * fTemp8) + (fRec6[1] * fTemp9));
+			fRec7[0] = (((fRec7[1] * fTemp9) + (fRec6[1] * (0 - fTemp8))) + iTemp3);
+			fRec8[0] = (fSlow1 + (0.999f * fRec8[1]));
+			fVec1[0] = fSlow2;
+			fRec9[0] = ((int((((fSlow2 - fVec1[1]) == 1) > 0)))?0:min(fConst4, (fRec9[1] + 1)));
+			int iTemp10 = int((fRec9[0] < fConst5));
+			fRec0[0] = ((0.999f * fRec0[1]) + (0.001f * ((((fRec1[0] + fRec4[0]) + fRec6[0]) * fRec8[0]) * ((iTemp10)?((int((fRec9[0] < 0)))?0:((iTemp10)?(fConst6 * fRec9[0]):1)):((int((fRec9[0] < fConst4)))?((fConst7 * (fConst5 - fRec9[0])) + 1):0)))));
+			output0[i] = (FAUSTFLOAT)fRec0[0];
 			// post processing
+			fRec0[1] = fRec0[0];
+			fRec9[1] = fRec9[0];
+			fVec1[1] = fVec1[0];
 			fRec8[1] = fRec8[0];
 			fRec7[1] = fRec7[0];
 			fRec6[1] = fRec6[0];
@@ -798,9 +804,7 @@ class Saw : public dsp {
 			fRec2[1] = fRec2[0];
 			fRec1[1] = fRec1[0];
 			fRec3[1] = fRec3[0];
-			fRec0[1] = fRec0[0];
-			iVec1[1] = iVec1[0];
-			fVec0[1] = fVec0[0];
+			iVec0[1] = iVec0[0];
 		}
 	}
 };
