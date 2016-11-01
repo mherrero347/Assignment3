@@ -1,15 +1,7 @@
-# Update 2
-Still compiling, and recently produced noise, but now that I'm trying to implement a Faust-generated sound, it won't produce noise again :(
+#Splatter_midi
 
-# Update 1
-It now compiles, but does not produce sound. Getting there...
+Splatter_midi is a MIDI synthesizer plugin that uses a chain of Faust-generated simple oscillators with an attack-release envelope applied for each key sound. Also, as each key is pressed, the key color represented on the midi keyboard component will change! If the user has clicked the key with their mouse, the key will change color, and reset to white or black after the key has been released. If the user plays a key using a midi keyboard, the key will stay colored (changing color as each new midi signal is received). The key colors can be reset by clicking on the keys.
 
-# Assignment3
+A demo of the plugin can be seen here: https://youtu.be/vmwxypiHiNk
 
-This, at the moment, is a very sad, non-compiling attempt at assignment 3, creating a MIDI controlled plugin. I'm going to see if I can make it work, though...
-
-The idea is that I'll have a simple plugin with a MidiKeyboardComponent showing the status of the midi keys as they're pressed, with the user able to control gain, distortion, attack, and release of the envelope of the sound, so that they can make these cool percussive, distorted sounds. I'm hoping to implement the actual oscillator in Faust.
-
-Womp womp,
-
-Matt Herrero
+- Matt
